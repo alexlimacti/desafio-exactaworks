@@ -46,43 +46,28 @@ public class ExpensesService {
         return new PageImpl<>(mapper.toDTOList(page.getContent()), page.getPageable(), page.getTotalElements());
     }
 
+    @Transactional(readOnly = true)
     public GetExpensesDTO findById(Long id) {
         var entity = expensesRepository.findById(id).orElseThrow(() -> new ExpensesNotFoundException(EXPENSES_DONT_FOUND));
         return mapper.toDTO(entity);
     }
 
+    @Transactional
     public void delete(Long id) {
         var entity = mapper.getToEntity(findById(id));
         expensesRepository.delete(entity);
     }
 
+    @Transactional
     public GetExpensesDTO updateExpenses(Long id, CreateExpensesDTO dto) {
         try {
+            System.out.println(id);
             var entity = mapper.getToEntity(findById(id));
             BeanUtils.copyProperties(dto, entity,
                     "id");
             return mapper.toDTO(expensesRepository.save(entity));
         } catch (Exception e) {
             throw new ExpensesNotFoundException(EXPENSES_DONT_FOUND);
-        }
-    }
-
-    private void merge(Map<String, Object> dadosOrigem, Expenses destinationExpenses, HttpServletRequest request) {
-        ServletServerHttpRequest servletHttpRequest = new ServletServerHttpRequest(request);
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, true);
-            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
-            Expenses originExpenses = objectMapper.convertValue(dadosOrigem, Expenses.class);
-            dadosOrigem.forEach((nomePropriedade, valorPropriedade) -> {
-                Field field = ReflectionUtils.findField(Expenses.class, nomePropriedade);
-                field.setAccessible(true);
-                Object novoValor = ReflectionUtils.getField(field, originExpenses);
-                ReflectionUtils.setField(field, destinationExpenses, novoValor);
-            });
-        } catch (IllegalArgumentException e) {
-            //Throwable rootCause = ExceptionUtils.getRootCause(e);
-            //throw new HttpMessageNotReadableException(e.getMessage(), rootCause, servletHttpRequest);
         }
     }
 

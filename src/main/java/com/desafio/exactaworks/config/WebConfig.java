@@ -1,4 +1,4 @@
-package com.desafio.exactaworks.infrastructure.config;
+package com.desafio.exactaworks.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;

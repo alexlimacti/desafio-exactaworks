@@ -1,6 +1,6 @@
-package com.desafio.exactaworks.domain.repository;
+package com.desafio.exactaworks.repository;
 
-import com.desafio.exactaworks.domain.model.Expenses;
+import com.desafio.exactaworks.model.Expenses;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ExpensesRepository extends JpaRepository<Expenses, Long> {

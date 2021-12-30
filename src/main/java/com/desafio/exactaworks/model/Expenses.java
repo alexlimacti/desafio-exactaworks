@@ -1,9 +1,10 @@
-package com.desafio.exactaworks.domain.model;
+package com.desafio.exactaworks.model;
 
 import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class Expenses implements Serializable {
     private String peopleName;
     private String description;
     private LocalDateTime hourTime;
-    private Double value;
+    private BigDecimal amount;
 
     @ElementCollection
     @CollectionTable(name = "list_tags", joinColumns = @JoinColumn(name = "id"))
